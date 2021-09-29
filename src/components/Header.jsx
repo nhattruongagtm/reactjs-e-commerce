@@ -12,7 +12,7 @@ export default function Header() {
                 </div>
                 <div className="header__items">
                     <div className="header__item">
-                        <NavLink to="/">
+                        <NavLink to="/" className="none-link">
                             Home
                         </NavLink>
                         
@@ -34,7 +34,7 @@ export default function Header() {
                     </div>
                 </div>
                 <div className="header__cart">
-                   <Link to="/cart">
+                   <Link to="/cart" className="none-link">
                         <div className="header__cart--rounded ">
                             <i className="fas fa-shopping-cart"></i>
                             <div className="header__cart--number">0</div>

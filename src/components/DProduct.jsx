@@ -10,6 +10,8 @@ export default function DProduct() {
   const [sizes,setSizes] = useState([]);
   const [colors,setColors] = useState([]);
   const [desc,setDesc] = useState([]);
+  const [images,setImages] = useState([]);
+
 
   const queryString = require("query-string");
 
@@ -26,9 +28,10 @@ export default function DProduct() {
         console.log("a", product);
 
         setProduct(product);  
-        setSizes(product.sizes)
-        setColors(product.colors)
-        setDesc(product.desc)
+        setSizes(product.sizes);
+        setColors(product.color);
+        setDesc(product.desc);
+        setImages(product.images);
 
       })
       .catch((e) => {
@@ -82,7 +85,7 @@ export default function DProduct() {
         <div className="detail__product--info">
           <div className="detail__product--info--status">new balance</div>
           <div className="detail__product--info--star">
-            {Number.parseInt(product.rate) > 0 &&
+            {/* {Number.parseInt(product.rate) > 0 &&
               Array.from(new Array(product.rate)).map((index) => {
                 return (
                   <i key={faker.random.uuid()} className="fas fa-star"></i>
@@ -93,7 +96,7 @@ export default function DProduct() {
                 return (
                   <i key={faker.random.uuid()} className="far fa-star"></i>
                 );
-              })}
+              })} */}
           </div>
           <div className="detail__product--info--name">{product.name}</div>
           <div className="detail__product--info--price">
@@ -158,21 +161,13 @@ export default function DProduct() {
         </div>
         <div className="info__main">
           <div className="info__main--info">
-            <div className="info__main--info--name bold">ULTRABOOST 21</div>
+            <div className="info__main--info--name bold">{product.name}</div>
             <div className="info__main--info--detail">
               <div className="bold brief--info">
-                GIÀY VỚI KHẢ NĂNG HOÀN TRẢ NĂNG LƯỢNG ĐÁNG KINH NGẠC.
+                {desc[0]}
               </div>
               <div className="more--info">
-                Định nghĩa của tốt nhất không bao giờ nghỉ ngơi. Khi chúng tôi
-                ra mắt đôi adidas Ultraboost đầu tiên, chúng là đôi giày chạy bộ
-                tốt nhất mà chúng tôi từng làm. Với mỗi bản cậdiv nhật mới,
-                chúng tôi đã nâng cao tiêu chuẩn. Và bây giờ bạn đã có được
-                chiếc đệm với khả năng hoàn trả năng lượng mà bạn hằng mong
-                muốn. Phiên bản này có thêm 6% viên nang Boost và phần upper
-                adidas Primeknit. Nó cung cấp cho bạn thêm năng lượng trong mỗi
-                bước chân. Đẩy năng lượng tuyến tính, cung cấp hỗ trợ bàn chân
-                trước và chân giữa.
+                {desc[1]}
               </div>
               <div className="bold">Thông số</div>
               <ul className="list--info">

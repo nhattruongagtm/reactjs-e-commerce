@@ -29,12 +29,19 @@ export default function ListProductItem(props) {
                    {product.name}
                 </div>
                 <div className="main__products--item--info--price">
-                    <div className="item--info--price">{product.price}.000₫</div>
-                    <div className="item--info--sprice">{product.price}.000₫</div>
+                   {
+                       product.priceSale >= 0 ? (
+                            <>
+                                <div className="item--info--price">{product.priceSale}.000₫</div>
+                                <div className="item--info--sprice">{product.price}.000₫</div>
+                            </>
+                       ): <div className="item--info--price">{product.price}.000₫</div>
+
+                   }
                 </div>
                 <div className="main__products--item--info--star">
                 
-                {
+                {/* {
                     Array.from(new Array(product.rate)).map((index)=>{
                         return (<i key={faker.random.uuid()} className="fas fa-star"></i>);
                     })
@@ -42,7 +49,7 @@ export default function ListProductItem(props) {
                     Array.from(new Array(5-product.rate)).map((index)=>{
                         return (<i key = {faker.random.uuid()} className="far fa-star"></i>);
                     })
-                }
+                } */}
             </div>
             </div>
             <div className="main__products--item--label">MỚI</div>

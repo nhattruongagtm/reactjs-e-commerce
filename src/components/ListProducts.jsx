@@ -1,60 +1,106 @@
-import React, { useEffect, useState } from 'react'
-import axiosClient from '../api/axiosClient'
-import { productsApi } from '../api/productsApi'
-import ListProductItem from './ListProductItem'
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { productsApi } from "../api/productsApi";
+import {
+  changePage,
+  changePageNext,
+  changePagePrevious,
+} from "../store/loadProductSlice";
+import ListProductItem from "./ListProductItem";
+import value from "../constants/sortValues";
 
 export default function ListProducts() {
+  const [products, setProducts] = useState([]);
+  const numberOfPage = 50;
+  const dispatch = useDispatch();
+  const qs = require('query-string');
 
-    const [products,setProducts] = useState({
-        data: [],
-        pagination: {}
+  const params = useSelector((state) => state.loadProduct);
+
+  console.log(params);
+
+  const [pageNumber, setPageNumber] = useState(0);
+
+  // xem params truyền vào
+  const news = qs.stringify(params)
+
+  console.log(news)
+
+
+
+  useEffect(() => {
+    productsApi.getAllProducts(params).then((res) => {
+      setProducts(res.data);
+
+
+
+
+      let pn = 0;
+
+      if (res.pagination._totalRows % res.pagination._limit === 0) {
+        pn = res.pagination._totalRows / res.pagination._limit;
+      } else {
+        pn = Math.floor(res.pagination._totalRows / res.pagination._limit) + 1;
+      }
+
+      setPageNumber(pn);
     });
+  }, [params]);
 
-    useEffect(()=>{
-        productsApi.getAllProducts({
-            _page: 1,
-            _limit: 5
-        }).then((res)=>{
-            // console.log(res);
+  console.log(products.length);
 
-            setProducts({
-                ...products,
-                data: res.data,
-                pagination: res.pagination
-            })
-        })
-    },[]);
+  let ps = Array.from(new Array(pageNumber));
 
-    console.log(products)
-    
-    return (
-        <div className="container__product">
-            <div className="main__products">
-                
-                {
-                    products.data.map((item,index)=>{
-                        return <ListProductItem product={item} key={index}/>
-                    })
+  for (let i = 0; i < ps.length; i++) {
+    ps[i] = i + 1;
+  }
+
+  return (
+    <div className="container__product">
+      <div className="main__products">
+        {products.length > 0 &&
+          products.map((item, index) => {
+            return <ListProductItem product={item} key={index} />;
+          })}
+      </div>
+      <div className="pagination">
+        {params._page > 1 && (
+          <div
+            className="pagination__item"
+            onClick={() => dispatch(changePagePrevious())}
+          >
+            <i className="fas fa-chevron-left"></i>
+          </div>
+        )}
+        {/* pagination__item--active */}
+
+        {pageNumber > 0 &&
+          ps.map((index) => {
+            return (
+              <div
+                key={index}
+                className={
+                  index !== params._page
+                    ? `pagination__item`
+                    : `pagination__item pagination__item--active`
                 }
-            </div>
-            <div className="pagination">
-                <div className="pagination__item">
-                <i className="fas fa-chevron-left"></i>
-                </div>
-                <div className="pagination__item pagination__item--active">
-                    1
-                </div>
-                <div className="pagination__item">
-                    2
-                </div>
-                <div className="pagination__item">
-                    ...
-                </div>
-                <div className="pagination__item">
-                <i className="fas fa-chevron-right"></i>
-                </div>
-            </div>
-    
-        </div>
-        )
+                onClick={() => dispatch(changePage(index))}
+              >
+                {index}
+              </div>
+            );
+          })}
+
+        <div className="pagination__item">...</div>
+        {params._page < pageNumber && (
+          <div
+            className="pagination__item"
+            onClick={() => dispatch(changePageNext())}
+          >
+            <i className="fas fa-chevron-right"></i>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }

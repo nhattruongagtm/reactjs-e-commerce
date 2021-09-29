@@ -1,6 +1,94 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux';
+import { categoriesApi } from '../api/categoriesApi'
+import filterValue from '../constants/filterValues';
+import { changeBrand, changeGender, changePriceGTE, changePriceLTE } from '../store/loadProductSlice';
 
 export default function Navigation() {
+    const [categories,setCategories] = useState([]);
+    const [numbers,setNumbers] = useState(0);
+    const [gender,setGender] = useState([]);
+    const [category,setCategory] = useState([]);
+    const [priceGTE,setPriceGTE] = useState([]);
+    const [priceLTE,setPriceLTE] = useState([]);
+    const dispatch = useDispatch();
+
+    const isExist = (value,array) =>{
+        return array.findIndex((item)=>{
+            return item === value;
+        })
+    }
+
+    useEffect(()=>{
+        categoriesApi.getAllCategories().then((data)=>{
+            setCategories(data);
+        })
+
+    },[]);
+
+    // số sản phẩm của từng danh mục
+    const numberProductsInCategory = (categoryID) =>{
+        let result = 0;
+        categoriesApi.getProductsInCategory({
+            _limit: 100000,
+            _page: 1,
+            categoryID: categoryID
+        }).then((data)=>{
+            result = data.pagination._totalRows;
+            setNumbers(result);
+        })
+    }
+
+    // filter gender
+    const handleChangeChecked = (value) =>{
+        const index = isExist(value,gender);
+        let newGender = [...gender];
+        index === -1 ? newGender.push(value) : newGender.splice(index,1);
+
+        setGender(newGender);
+
+
+        dispatch(changeGender(newGender));
+
+    }
+
+    // filter brand
+    const handleChageBrand = (categoryID)=>{
+        const index = isExist(categoryID,category);
+        let newCategory = [...category];
+        index === -1 ? newCategory.push(categoryID) : newCategory.splice(index,1);
+
+        setCategory(newCategory);
+
+        dispatch(changeBrand(newCategory));
+    }
+
+    // filter price
+    const handleChangePrice = (value) =>{
+    
+        const price_gte = value.price_gte;
+        const price_lte =  value.price_lte;
+      
+
+        const index = isExist(price_gte,priceGTE);
+        let newGTE = [...priceGTE];
+        let newLTE = [...priceLTE];
+
+        index === -1 ? (newGTE.push(price_gte) && newLTE.push(price_lte)) : (newGTE.splice(index,1) && newLTE.splice(index,1));
+
+        setPriceGTE(newGTE);
+        setPriceLTE(newLTE);
+
+        dispatch(changePriceGTE(newGTE));
+        dispatch(changePriceLTE(newLTE));
+
+    }
+
+    console.log(priceGTE)
+    console.log(priceLTE)
+
+
+
     return (
         <div className="main__nav">
             <div className="nav__item">
@@ -10,15 +98,15 @@ export default function Navigation() {
                     </div>
                     <div className="nav__item--cat--items">
                         <div className="cat__item">
-                            <div className="cat_item_type"><input type="checkbox"/>Nam</div>
+                            <div className="cat_item_type"><input type="checkbox" value="0" onChange={()=>handleChangeChecked(0)}/>Nam</div>
                             <div className="cat_item_number">(695)</div>
                         </div>
                         <div className="cat__item">
-                            <div className="cat_item_type"><input type="checkbox"/>Nữ</div>
+                            <div className="cat_item_type"><input type="checkbox" value="1" onChange={()=>handleChangeChecked(1)}/>Nữ</div>
                             <div className="cat_item_number">(180)</div>
                         </div>
                         <div className="cat__item">
-                            <div className="cat_item_type"><input type="checkbox"/>Uniset</div>
+                            <div className="cat_item_type"><input type="checkbox" value="2" onChange={()=>handleChangeChecked(2)}/>Uniset</div>
                             <div className="cat_item_number">(210)</div>
                         </div>
                         
@@ -29,34 +117,17 @@ export default function Navigation() {
                         Thương hiệu
                     </div>
                     <div className="nav__item--cat--items">
-                        <div className="cat__item">
-                            <div className="cat_item_type"><input type="checkbox"/>MIZUNO</div>
-                            <div className="cat_item_number">(867)</div>
-                        </div>
-                        <div className="cat__item">
-                            <div className="cat_item_type"><input type="checkbox"/>NEW BALANCE</div>
-                            <div className="cat_item_number">(145)</div>
-                        </div>
-                        <div className="cat__item">
-                            <div className="cat_item_type"><input type="checkbox"/>NIKE</div>
-                            <div className="cat_item_number">(125)</div>
-                        </div>
-                        <div className="cat__item">
-                            <div className="cat_item_type"><input type="checkbox"/>PUMA</div>
-                            <div className="cat_item_number">(68)</div>
-                        </div>
-                        <div className="cat__item">
-                            <div className="cat_item_type"><input type="checkbox"/>SKECHERS</div>
-                            <div className="cat_item_number">(12)</div>
-                        </div>
-                        <div className="cat__item">
-                            <div className="cat_item_type"><input type="checkbox"/>TEVA</div>
-                            <div className="cat_item_number">(45)</div>
-                        </div>
-                        <div className="cat__item">
-                            <div className="cat_item_type"><input type="checkbox"/>UNDER ARMOUR</div>
-                            <div className="cat_item_number">(87)</div>
-                        </div>
+                        {
+                            categories.map((item)=>{
+                                return (
+                                    <div className="cat__item" key={item.categoryID}> {numberProductsInCategory(item.categoryID)}
+                                        <div className="cat_item_type"><input type="checkbox" value={item.categoryID} onChange={()=>handleChageBrand(item.categoryID)}/>{item.categoryName}</div>
+                                        <div className="cat_item_number">({numbers})</div>
+                                    </div>
+                                )
+                            })
+                        }
+                        
                         
                     </div>
                 </div>
@@ -66,33 +137,37 @@ export default function Navigation() {
                     </div>
                     <div className="nav__item--cat--items">
                         <div className="cat__item">
-                            <div className="cat_item_type"><input type="checkbox"/>Dưới 500.000₫</div>
+                            <div className="cat_item_type"><input type="checkbox" value={filterValue.B0_5} onChange={()=>handleChangePrice({price_gte:0,price_lte:499999})}/>Dưới 500.000₫</div>
                             <div className="cat_item_number">(695)</div>
                         </div>
                         <div className="cat__item">
-                            <div className="cat_item_type"><input type="checkbox"/>500.000₫ - 1.000.000₫</div>
+                            <div className="cat_item_type"><input type="checkbox" value={filterValue.B5_1} onChange={()=>handleChangePrice({price_gte:500000,price_lte:999999})}/>500.000₫ - 1.000.000₫</div>
                             <div className="cat_item_number">(180)</div>
                         </div>
                         <div className="cat__item">
-                            <div className="cat_item_type"><input type="checkbox"/>1.000.000₫ - 2.000.000₫</div>
+                            <div className="cat_item_type"><input type="checkbox" value={filterValue.B1_2} onChange={()=>handleChangePrice({price_gte:1000000,price_lte:1999999})}/>1.000.000₫ - 2.000.000₫</div>
                             <div className="cat_item_number">(210)</div>
                         </div>
                         <div className="cat__item">
-                            <div className="cat_item_type"><input type="checkbox"/>3.000.000₫ - 3.000.000₫</div>
+                            <div className="cat_item_type"><input type="checkbox" value={filterValue.B3_4} onChange={()=>handleChangePrice({price_gte:2000000,price_lte:2999999})}/>2.000.000₫ - 3.000.000₫</div>
                             <div className="cat_item_number">(210)</div>
                         </div>
                         <div className="cat__item">
-                            <div className="cat_item_type"><input type="checkbox"/>4.000.000₫ - 5.000.000₫</div>
+                            <div className="cat_item_type"><input type="checkbox" value={filterValue.B3_4} onChange={()=>handleChangePrice({price_gte:3000000,price_lte:3999999})}/>3.000.000₫ - 4.000.000₫</div>
                             <div className="cat_item_number">(210)</div>
                         </div>
                         <div className="cat__item">
-                            <div className="cat_item_type"><input type="checkbox"/>Trên 5.000.000₫</div>
+                            <div className="cat_item_type"><input type="checkbox" value={filterValue.B4_5} onChange={()=>handleChangePrice({price_gte:4000000,price_lte:4999999})}/>4.000.000₫ - 5.000.000₫</div>
+                            <div className="cat_item_number">(210)</div>
+                        </div>
+                        <div className="cat__item">
+                            <div className="cat_item_type"><input type="checkbox" value={filterValue.B5_8} onChange={()=>handleChangePrice({price_gte:5000000,price_lte:1000000000})}/>Trên 5.000.000₫</div>
                             <div className="cat_item_number">(210)</div>
                         </div>
                         
                     </div>
                 </div>
-                <div className="nav__item--cat">
+                {/* <div className="nav__item--cat">
                     <div className="nav__item--cat--title">
                         Phần trăm giảm
                     </div>
@@ -114,7 +189,7 @@ export default function Navigation() {
                             <div className="cat_item_number">(210)</div>
                         </div>
                     </div>
-                </div>
+                </div> */}
                </div>
         </div>
     )
