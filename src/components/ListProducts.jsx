@@ -4,16 +4,15 @@ import { productsApi } from "../api/productsApi";
 import {
   changePage,
   changePageNext,
-  changePagePrevious,
+  changePagePrevious
 } from "../store/loadProductSlice";
 import ListProductItem from "./ListProductItem";
-import value from "../constants/sortValues";
 
 export default function ListProducts() {
   const [products, setProducts] = useState([]);
-  const numberOfPage = 50;
   const dispatch = useDispatch();
   const qs = require('query-string');
+  const [isLoading,setIsLoading] = useState(true);
 
   const params = useSelector((state) => state.loadProduct);
 
@@ -24,16 +23,10 @@ export default function ListProducts() {
   // xem params truyền vào
   const news = qs.stringify(params)
 
-  console.log(news)
-
-
-
   useEffect(() => {
     productsApi.getAllProducts(params).then((res) => {
+      setIsLoading(false);
       setProducts(res.data);
-
-
-
 
       let pn = 0;
 
@@ -57,14 +50,15 @@ export default function ListProducts() {
 
   return (
     <div className="container__product">
-      <div className="main__products">
-        {products.length > 0 &&
+     {isLoading && <div className="loading--product"> <lottie-player  src="https://assets3.lottiefiles.com/packages/lf20_ngt1ne8r.json"  background="transparent"  speed="1"  loop autoplay></lottie-player></div>}
+      <div className="main__products fade__in">
+        {!isLoading && products.length > 0 &&
           products.map((item, index) => {
             return <ListProductItem product={item} key={index} />;
           })}
       </div>
       <div className="pagination">
-        {params._page > 1 && (
+        {(!isLoading && params._page > 1) && (
           <div
             className="pagination__item"
             onClick={() => dispatch(changePagePrevious())}
@@ -74,7 +68,7 @@ export default function ListProducts() {
         )}
         {/* pagination__item--active */}
 
-        {pageNumber > 0 &&
+        {!isLoading && pageNumber > 0 &&
           ps.map((index) => {
             return (
               <div
@@ -91,7 +85,7 @@ export default function ListProducts() {
             );
           })}
 
-        <div className="pagination__item">...</div>
+        {/* {!isLoading && products.length <=0 && <div className="pagination__item">...</div>} */}
         {params._page < pageNumber && (
           <div
             className="pagination__item"
@@ -101,6 +95,7 @@ export default function ListProducts() {
           </div>
         )}
       </div>
+     {(products.length <= 0 && !isLoading) && <div className="no__products">Không có sản phẩm nào.</div>}
     </div>
   );
 }

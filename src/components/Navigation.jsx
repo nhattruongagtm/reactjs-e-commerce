@@ -6,7 +6,7 @@ import { changeBrand, changeGender, changePriceGTE, changePriceLTE } from '../st
 
 export default function Navigation() {
     const [categories,setCategories] = useState([]);
-    const [numbers,setNumbers] = useState(0);
+    // const [numbers,setNumbers] = useState(0);
     const [gender,setGender] = useState([]);
     const [category,setCategory] = useState([]);
     const [priceGTE,setPriceGTE] = useState([]);
@@ -27,17 +27,17 @@ export default function Navigation() {
     },[]);
 
     // số sản phẩm của từng danh mục
-    const numberProductsInCategory = (categoryID) =>{
-        let result = 0;
-        categoriesApi.getProductsInCategory({
-            _limit: 100000,
-            _page: 1,
-            categoryID: categoryID
-        }).then((data)=>{
-            result = data.pagination._totalRows;
-            setNumbers(result);
-        })
-    }
+    // const numberProductsInCategory = (categoryID) =>{
+    //     let result = 0;
+    //     categoriesApi.getProductsInCategory({
+    //         _limit: 100000,
+    //         _page: 1,
+    //         categoryID: categoryID
+    //     }).then((data)=>{
+    //         // result = data.pagination._totalRows;
+    //         // setNumbers(result);
+    //     })
+    // }
 
     // filter gender
     const handleChangeChecked = (value) =>{
@@ -120,9 +120,9 @@ export default function Navigation() {
                         {
                             categories.map((item)=>{
                                 return (
-                                    <div className="cat__item" key={item.categoryID}> {numberProductsInCategory(item.categoryID)}
-                                        <div className="cat_item_type"><input type="checkbox" value={item.categoryID} onChange={()=>handleChageBrand(item.categoryID)}/>{item.categoryName}</div>
-                                        <div className="cat_item_number">({numbers})</div>
+                                    <div className="cat__item" key={item.id}>
+                                        <div className="cat_item_type"><input type="checkbox" value={item.id} onChange={()=>handleChageBrand(item.id)}/>{item.categoryName}</div>
+                                        <div className="cat_item_number">(25)</div>
                                     </div>
                                 )
                             })

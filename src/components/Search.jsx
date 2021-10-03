@@ -120,10 +120,10 @@ export default function Search(props) {
               onChange={handleSearchInput}
             />
           </div>
-          <div type="submit" className="search--btn btn">
+          <button type="submit" className="search--btn btn">
             <i class="fas fa-search"></i>
             <div className="search--btn--text">Tìm kiếm</div>
-          </div>
+          </button>
         </form>
       </div>
     </div>

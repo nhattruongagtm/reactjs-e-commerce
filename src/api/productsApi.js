@@ -17,5 +17,21 @@ export const productsApi = {
         return axiosClient.get(url,{params}).catch((e)=>{
             console.log(e);
         });
-    }
+    },
+    getNewProducts(params){
+
+        const url = '/products';
+
+        return axiosClient.get(url,{params}).catch((e)=>{
+            console.log(e);
+        });
+    },
+    getProminentProducts(params){
+
+        const url = '/products';
+
+        return axiosClient.get(url,{params}).catch((e)=>{
+            console.log(e);
+        });
+    },
 }
