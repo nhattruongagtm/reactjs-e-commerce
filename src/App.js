@@ -5,8 +5,10 @@ import HomePage from './pages/home/HomePage';
 import DetailProduct from './pages/products/DetailProduct';
 import LoginPage from './pages/login/LoginPage';
 import Products from './pages/products/Products';
+import { converPrice } from './utils/converPrice';
 
 function App() {
+  console.log(converPrice(464))
   return (
     
           <Switch>

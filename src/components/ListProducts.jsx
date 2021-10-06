@@ -49,14 +49,17 @@ export default function ListProducts() {
   }
 
   return (
+    <>
     <div className="container__product">
      {isLoading && <div className="loading--product"> <lottie-player  src="https://assets3.lottiefiles.com/packages/lf20_ngt1ne8r.json"  background="transparent"  speed="1"  loop autoplay></lottie-player></div>}
+     {(products.length <= 0 && !isLoading) && <div className="no__products">Không có sản phẩm nào.</div>}
       <div className="main__products fade__in">
         {!isLoading && products.length > 0 &&
           products.map((item, index) => {
             return <ListProductItem product={item} key={index} />;
           })}
       </div>
+      
       <div className="pagination">
         {(!isLoading && params._page > 1) && (
           <div
@@ -95,7 +98,9 @@ export default function ListProducts() {
           </div>
         )}
       </div>
-     {(products.length <= 0 && !isLoading) && <div className="no__products">Không có sản phẩm nào.</div>}
+
     </div>
-  );
+          <label htmlFor="products__nav" className="products__layer"> </label>
+    </>
+    );
 }

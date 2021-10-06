@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { productsApi } from "../api/productsApi";
+import { converPrice } from "../utils/converPrice";
 
 export default function NewShoes() {
   const [newProducts, setNewProducts] = useState([]);
@@ -52,11 +53,11 @@ export default function NewShoes() {
                   <div className="main__products--item--info--price" onClick={()=>handleDetailProduct(item.id)}>
                   {
                      item.priceSale === 0 ? (
-                      <div className="item--info--price">{item.price}₫</div>
+                      <div className="item--info--price">{converPrice(item.price+"")}₫</div>
                      ) : (
                       <>
-                      <div className="item--info--price">{item.priceSale}₫</div>
-                      <div className="item--info--sprice">{item.price}₫</div>
+                      <div className="item--info--price">{converPrice(item.priceSale+"")}₫</div>
+                      <div className="item--info--sprice">{converPrice(item.price+"")}₫</div>
                       </>
                      )
                    }

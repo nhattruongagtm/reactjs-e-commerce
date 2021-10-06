@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { cartApi } from "../api/cartApi";
+import { converPrice } from "../utils/converPrice";
 import CartItem from "./CartItem";
 
 export default function Cart() {
@@ -76,7 +77,7 @@ export default function Cart() {
             </div>
             <div className="cart__page--checkout--exc">
               <div>Tổng phụ</div>
-              <div>{totalPrice}₫</div>
+              <div>{converPrice(totalPrice)}₫</div>
               <div>Thuế và vận chuyển được tính khi thanh toán.</div>
               <div className="btn--checkout">Thanh toán</div>
             </div>

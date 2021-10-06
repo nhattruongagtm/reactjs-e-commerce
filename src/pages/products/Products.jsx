@@ -11,7 +11,9 @@ export default function Products() {
       <Header/>
       <div className="container">
         <Search />
-        <div className="main">
+        <div className="main main__product--list">
+          <label htmlFor="products__nav" className="filter__products">Lọc</label>
+          <input type="checkbox" id="products__nav" hidden/>
           <Navigation />
           <ListProducts />
         </div>

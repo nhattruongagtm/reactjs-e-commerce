@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { cartApi } from "../api/cartApi";
+import { converPrice } from "../utils/converPrice";
 
 export default function CartItem(props) {
   const history = useHistory();
@@ -80,7 +81,7 @@ export default function CartItem(props) {
         </div>
         <div className="delete"onClick={handleDeleteCart}>Xóa</div>
       </div>
-      <div className="cart__page--main--item--price">{price}₫</div> 
+      <div className="cart__page--main--item--price">{converPrice(price)}₫</div> 
       <div className="cart__page--main--item--quantity">
         <div className="btn--sub" onClick={() => handleUpdateQuantity(-1)}>
           -
@@ -95,7 +96,7 @@ export default function CartItem(props) {
           +
         </div>
       </div>
-      <div className="cart__page--main--item--total">{price*quantity}₫</div>  
+      <div className="cart__page--main--item--total">{converPrice(price*quantity+"")}₫</div>  
     </div>
   );
 }

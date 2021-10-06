@@ -1,5 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router';
+import { converPrice } from '../utils/converPrice';
 
 export default function ListProductItem(props) {
     const {product} = props;
@@ -32,10 +33,10 @@ export default function ListProductItem(props) {
                    {
                        product.priceSale > 0 ? (
                             <>
-                                <div className="item--info--price">{product.priceSale}₫</div>
-                                <div className="item--info--sprice">{product.price}₫</div>
+                                <div className="item--info--price">{converPrice(product.priceSale+"")}₫</div>
+                                <div className="item--info--sprice">{converPrice(product.price+"")}₫</div>
                             </>
-                       ): <div className="item--info--price">{product.price}₫</div>
+                       ): <div className="item--info--price">{converPrice(product.price+"")}₫</div>
 
                    }
                 </div>

@@ -36,6 +36,12 @@ export default function Header() {
       <div className="header__logo">
         <div className="header__logo--item"></div>
       </div>
+      <label className="header__menu" htmlFor="header__nav">
+        {" "}
+        <i class="fas fa-bars"></i>
+      </label>
+      <input type="checkbox" id="header__nav" hidden />
+      <label htmlFor="header__nav" className="header__layer"></label>
       <div className="header__items">
         <div className="header__item">
           <NavLink to="/" className="none-link">
@@ -49,12 +55,26 @@ export default function Header() {
         </div>
         <div className="header__item">Contact</div>
         <div className="header__item">About</div>
+        <label htmlFor="header__nav" className="header__close">
+          <i class="far fa-times-circle"></i>
+        </label>
       </div>
       <div className="header__btn--login">
         <div className="header__cart">
-          <div className="header__cart--rounded">
-            <i className="fas fa-user"></i>
-          </div>
+          {/* <i className="fas fa-user user--default"></i> */}
+          {user === null ? (
+            <></>
+          ) : (
+            <>
+              <div className="header__cart--rounded">
+                <img
+                  className="header__cart--rounded--img"
+                  src="https://scontent.fsgn8-2.fna.fbcdn.net/v/t1.6435-9/51615188_743283126040607_9211828225620049920_n.jpg?_nc_cat=100&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=5Oyu62K1aVQAX_3S_xs&tn=HtdEXTK0HM4CEwO2&_nc_ht=scontent.fsgn8-2.fna&oh=0e66ab58c05b2ba83f9b1ab15670aba2&oe=617FDB38"
+                  alt=""
+                />
+              </div>
+            </>
+          )}
         </div>
         <div className="header__cart">
           {user !== null && (

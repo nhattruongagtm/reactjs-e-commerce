@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { cartApi } from "../api/cartApi";
 import { productsApi } from "../api/productsApi";
+import { converPrice } from "../utils/converPrice";
 
 export default function DProduct() {
   const faker = require("faker");
@@ -257,15 +258,15 @@ export default function DProduct() {
             {product.priceSale > 0 ? (
               <>
                 <div className="detail__product--info--price-p">
-                  {product.priceSale}₫
+                  {converPrice(product.priceSale+"")}₫
                 </div>
                 <div className="detail__product--info--price-s">
-                  {product.price}₫
+                  {converPrice(product.price+"")}₫
                 </div>
               </>
             ) : (
               <div className="detail__product--info--price-p">
-                {product.price}₫
+                {converPrice(product.price+"")}₫ 
               </div>
             )}
           </div>
