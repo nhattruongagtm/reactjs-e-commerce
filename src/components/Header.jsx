@@ -10,7 +10,7 @@ export default function Header() {
     localStorage.getItem("user") !== null
       ? JSON.parse(localStorage.getItem("user"))
       : null;
-  const [carts, setCarts] = useState([]);
+  const [carts, setCarts] = useState();
 
   useEffect(() => {
     user !== null &&
@@ -81,7 +81,7 @@ export default function Header() {
             <Link to="/cart" className="none-link">
               <div className="header__cart--rounded ">
                 <i className="fas fa-shopping-cart"></i>
-                <div className="header__cart--number">{carts.length}</div>
+                <div className="header__cart--number">{carts && carts.length}</div>
               </div>
             </Link>
           )}
