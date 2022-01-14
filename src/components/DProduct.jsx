@@ -5,7 +5,6 @@ import { productsApi } from "../api/productsApi";
 import { converPrice } from "../utils/converPrice";
 
 export default function DProduct() {
-  const faker = require("faker");
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
   const [product, setProduct] = useState({});
