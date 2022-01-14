@@ -7,14 +7,12 @@ export default function ListProductItem(props) {
     const history = useHistory();
     
 
-    const faker = require('faker');
-
     const handleDetailProduct = () =>{
         // <Redirect to={`/product?id=${product.productID}`}/>
 
         history.push(`/product?id=${product.id}`)
 
-        
+
     }
 
     return (
